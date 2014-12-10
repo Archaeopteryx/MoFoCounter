@@ -1,0 +1,1 @@
+This add-on for Firefox can be installed on [https://addons.mozilla.org/firefox/addon/counter-for-mozillas-eoy-fund/](https://addons.mozilla.org/firefox/addon/counter-for-mozillas-eoy-fund/)
