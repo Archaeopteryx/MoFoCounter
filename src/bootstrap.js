@@ -12,17 +12,8 @@ var mofofuraco =
 
   tickerInterval: function()
   {
-    let month = (new Date()).getMonth() + 1;
-    // End of year campaign only runs November and December. Update only once per day
-    // from March to October.
-    if ((month > 1) && (month < 11))
-    {
-      return 24 * 60 * 60 * 1000;
-    }
-    else
-    {
-      return 5000;
-    }
+    // One hour should be fine for now
+    return 60 * 60 * 1000;
   },
 
   timerObserver:
@@ -231,7 +222,7 @@ function startup(data, reason)
       toolbaritem.classList.add("toolbaritem-combined-buttons");
       toolbaritem.classList.add("panel-wide-item");
       toolbaritem.appendChild(label);
-      
+
       let listener =
       {
         onWidgetRemoved: function(aWidgetId, aPrevArea)
@@ -241,7 +232,7 @@ function startup(data, reason)
           mofofuraco.timerStop();
           mofofuraco.isVisible = false;
         },
-  
+
         onCustomizeStart: function(aWindow)
         {
           if (aWindow.document == aDocument)
@@ -253,7 +244,7 @@ function startup(data, reason)
             }
           }
         },
-  
+
         onCustomizeEnd: function(aWindow) {
           if (aWindow.document == aDocument) {
             mofofuraco.checkVisibility(aWindow);
@@ -261,7 +252,7 @@ function startup(data, reason)
         },
       };
       CustomizableUI.addListener(listener);
-  
+
       return toolbaritem;
     }
   });
