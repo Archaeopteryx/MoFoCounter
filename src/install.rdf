@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:type>2</em:type> <!-- 2 : Extension -->
         <em:id>mofofuraco@archaeopteryx</em:id>
-        <em:version>0.0.2</em:version>
+        <em:version>0.0.3</em:version>
         <em:bootstrap>true</em:bootstrap>
         <em:name>Counter for Mozilla&#39;s End of Year Fundraising</em:name>
         <em:description>Counter for Mozilla&#39;s End of Year Fundraising</em:description>
