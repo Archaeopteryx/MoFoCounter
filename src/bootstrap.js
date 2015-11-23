@@ -1,6 +1,7 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
+Components.utils.import("resource://gre/modules/Preferences.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
 
 var mofofuraco =
@@ -12,8 +13,12 @@ var mofofuraco =
 
   tickerInterval: function()
   {
+    if (!Preferences.has("extensions.mofofuraco.updateInterval"))
+    {
+      Preferences.set("extensions.mofofuraco.updateInterval", 60);
+    }
     // One hour should be fine for now
-    return 60 * 60 * 1000;
+    return Preferences.get("extensions.mofofuraco.updateInterval", 60) * 60 * 1000;
   },
 
   timerObserver:
@@ -38,6 +43,27 @@ var mofofuraco =
     if (mofofuraco.timer)
     {
       mofofuraco.timer.cancel();
+    }
+  },
+
+  prefObserver:
+  {
+    register: function()
+    {
+      this.branch = Services.prefs.getBranch("extensions.mofofuraco.updateInterval");
+      this.branch.addObserver("", mofofuraco.prefObserver, false);
+    },
+
+    unregister: function()
+    {
+      this.branch.removeObserver("", mofofuraco.prefObserver);
+    },
+
+    observe: function(aSubject, aTopic, aData) {
+      mofofuraco.timer.cancel();
+      mofofuraco.timer.init(mofofuraco.timerObserver,
+                            mofofuraco.tickerInterval(),
+                            Components.interfaces.nsITimer.TYPE_REPEATING_SLACK);
     }
   },
 
@@ -267,6 +293,7 @@ function startup(data, reason)
 
   // Wait for any new browser windows to open
   Services.wm.addListener(WindowListener);
+  mofofuraco.prefObserver.register();
 }
 
 function shutdown(data, reason)
@@ -286,7 +313,9 @@ function shutdown(data, reason)
     mofofuraco.tearDownBrowserUI(domWindow);
   }
 
- Services.wm.removeListener(WindowListener);
+  CustomizableUI.destroyWidget("mofofuraco-button");
+  Services.wm.removeListener(WindowListener);
+  mofofuraco.prefObserver.unregister();
 }
 
 function install(data, reason)
