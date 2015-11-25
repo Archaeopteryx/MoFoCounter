@@ -13,6 +13,18 @@ var mofofuraco =
 
   tickerInterval: function()
   {
+    if (!Preferences.has("extensions.mofofuraco.updateInterval.seconds"))
+    {
+      Preferences.set("extensions.mofofuraco.updateInterval.seconds", "");
+    }
+    let secondsPref = Preferences.get("extensions.mofofuraco.updateInterval.seconds");
+    let seconds = Number.parseFloat(secondsPref);
+    if (!Number.isNaN(seconds))
+    {
+      // 1 minute as default if the value stored in the seconds preferences is garbage.
+      // Server caches data for 10 seconds, so no need to check more often.
+      return seconds && (seconds >= 10) ? seconds * 1000 : 60 * 1000;
+    }
     if (!Preferences.has("extensions.mofofuraco.updateInterval"))
     {
       Preferences.set("extensions.mofofuraco.updateInterval", 60);
