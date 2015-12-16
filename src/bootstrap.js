@@ -4,6 +4,15 @@ Components.utils.import("resource:///modules/CustomizableUI.jsm");
 Components.utils.import("resource://gre/modules/Preferences.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
 
+var sound = Cc["@mozilla.org/sound;1"].createInstance(Ci.nsISound);
+var soundUri = Cc['@mozilla.org/network/standard-url;1'].createInstance(Ci.nsIURI);
+soundUri.spec = "chrome://mofofuraco/content/money.wav";
+
+if (!Preferences.has("extensions.mofofuraco.moneySound"))
+{
+  Preferences.set("extensions.mofofuraco.moneySound", false);
+}
+
 var mofofuraco =
 {
   amount: 0, // current amount of money donated
@@ -172,8 +181,18 @@ var mofofuraco =
         try
         {
           let paypalData = JSON.parse(xhr.responseText);
+          let previousAmount = mofofuraco.amount;
           mofofuraco.amount = Math.round(paypalData.sum);
           mofofuraco.updateLabelWithAmount();
+          if ( Preferences.get("extensions.mofofuraco.moneySound") === true)
+          {
+            // Did we make another $100,000?
+            if (previousAmount !== 0 &&
+                Math.floor(previousAmount / 100000) < Math.floor(mofofuraco.amount / 100000))
+            {
+              sound.play(soundUri);
+            }
+          }
         }
         catch(e)
         {
