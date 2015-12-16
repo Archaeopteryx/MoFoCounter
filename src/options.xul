@@ -2,4 +2,5 @@
 
 <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <setting type="integer" pref="extensions.mofofuraco.updateInterval" title="Update Interval in Minutes" min="1"/>
+  <setting type="bool" pref="extensions.mofofuraco.moneySound" title="Play a sound at every $100,000 interval"/>
 </vbox>
