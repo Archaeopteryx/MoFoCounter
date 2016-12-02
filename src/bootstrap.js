@@ -167,7 +167,7 @@ var mofofuraco =
   updateAmount: function()
   {
     let xhr = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
-    xhr.open("GET", "https://d3gxuc3bq48qfa.cloudfront.net/eoy-2014-total", true);
+    xhr.open("GET", "https://transaction-storage.mofoprod.net/eoy-2016-total", true);
     xhr.onerror = function(error)
     {
       console.error(error);
